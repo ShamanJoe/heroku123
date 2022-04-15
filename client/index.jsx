@@ -6,7 +6,7 @@ function FrontPage() {
     return <div>
         <h1>Movie database exam</h1>
             <ul>
-                <li><Link to={"/movies"}>List of all movies</Link></li>
+                <li><Link to={"/movies"}>List of all moviessss</Link></li>
                 <li></li>
             </ul>
     </div>
