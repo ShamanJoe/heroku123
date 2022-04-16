@@ -3,10 +3,18 @@ import {Router} from "express";
 export function MoviesApi(mongoDatabase) {
     const router = new Router();
 
+    const movies = [
+        {
+            title: "Movie 1"
+        },
+        {
+            title: "Movie 2"
+        },
+
+    ];
+
     router.get("/", async(req, res) => {
-        const movies = await mongoDatabase.collection("movies")
-            .find()
-            .toArray()
+        const movies = await mongoDatabase.collection("eksamen").find().toArray();
         res.json(movies)
     });
 
@@ -15,12 +23,3 @@ export function MoviesApi(mongoDatabase) {
     });
     return router;
 }
-const movies = [
-    {
-        title: "Movie 1"
-    },
-    {
-        title: "Movie 2"
-    },
-
-];
