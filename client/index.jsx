@@ -7,7 +7,6 @@ function FrontPage() {
         <h1>Movie database exam</h1>
             <ul>
                 <li><Link to={"/movies"}>List of all moviessss</Link></li>
-                <li></li>
             </ul>
     </div>
 }
@@ -19,6 +18,13 @@ async function fetchJSON(url) {
         throw new Error(`Failed to load ${res.status}: ${res.statusText}`)
     }
     return await res.json();
+}
+
+function MovieCard( {movie:{title, plot} }) {
+    return <div>
+        <h3>{title}</h3>
+        <div>{plot}</div>
+    </div>
 }
 
 function ListMovies() {
@@ -38,8 +44,8 @@ function ListMovies() {
         <h1>List of all movies</h1>
         <ul>
             {data.map((movie) => (
-                <li key={movie.title}>{movie.title}</li>
-            ))}
+               <MovieCard key={movie.title} movie={movie}/>
+                ))}
         </ul>
     </div>;
 }
