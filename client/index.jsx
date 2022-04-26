@@ -27,7 +27,7 @@ function MovieCard( {movie:{title, plot} }) {
     </div>
 }
 
-function ListMovies() {
+export function ListMovies() {
     const {loading, error, data} = useLoading(async () => fetchJSON("/api/movies")
     )
 
@@ -59,7 +59,7 @@ function Application() {
 
     </BrowserRouter>
 }
-
+//ERROR HANDLING
 function useLoading(loadingFunction){
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState();
