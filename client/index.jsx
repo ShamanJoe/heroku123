@@ -64,9 +64,8 @@ function LoginPage() {
             redirect_uri: window.location.origin + "/login/callback"
         };
 
-        setRedirectUrl(
+        window.location.href =
             authorization_endpoint + "?" + new URLSearchParams(parameters)
-        );
     }, [])
     return <div className={"page-wrap"}>
             <header className={"page-header"}>Daily News</header>
@@ -76,9 +75,7 @@ function LoginPage() {
                 <Link to={"/publish"}>Publish</Link>
             </nav>
             <div>
-                <h1>Login updated</h1>
-                <a href={redirectUrl}>Login</a>
-                <div>{redirectUrl}</div>
+                <h1>Please hold (your horses)...</h1>
             </div>
         </div>
 
