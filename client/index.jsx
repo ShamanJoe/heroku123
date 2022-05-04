@@ -53,6 +53,21 @@ export function FrontPage() {
 }
 
 function LoginPage() {
+    const [redirectUrl, setRedirectUrl] = useState()
+    useEffect(async ()=> {
+        const {authorization_endpoint} = await fetchJSON("https://accounts.google.com/.well-known/openid-configuration")
+
+        const parameters = {
+            response_type: "token",
+            client_id: "1022598625512-5bh76vhsqr09vl45td0horgevn8qpn5b.apps.googleusercontent.com",
+            scope: "email profile",
+            redirect_uri: window.location.origin + "/login/callback"
+        };
+
+        setRedirectUrl(
+            authorization_endpoint + "?" + new URLSearchParams(parameters)
+        );
+    }, [])
     return <div className={"page-wrap"}>
             <header className={"page-header"}>Daily News</header>
             <nav className={"page-nav"}>
@@ -60,7 +75,13 @@ function LoginPage() {
                 <Link to={"/login"}>Log in</Link>
                 <Link to={"/publish"}>Publish</Link>
             </nav>
+            <div>
+                <h1>Login updated</h1>
+                <a href={redirectUrl}>Login</a>
+                <div>{redirectUrl}</div>
+            </div>
         </div>
+
 }
 
 function PublishPage() {
@@ -80,6 +101,7 @@ function Application() {
            <Route path={"/"} element={<FrontPage/>}/>
            <Route path={"/login"} element={<LoginPage/>}/>
            <Route path={"/publish"} element={<PublishPage/>}/>
+           <Route path={"/login/callback"} element={<h1>Login callback</h1>}/>
        </Routes>
 
     </BrowserRouter>
