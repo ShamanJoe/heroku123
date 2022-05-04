@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import * as ReactDOM from "react-dom";
-import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Link, Route, Routes, useNavigate} from "react-router-dom";
 import '../resources/style.css'
 
 async function fetchJSON(url) {
@@ -39,6 +39,7 @@ export function FrontPage() {
             <Link to={"/"}>The Daily Mail</Link>
             <Link to={"/login"}>Log in</Link>
             <Link to={"/publish"}>Publish</Link>
+            <Link to={"/login/profile"}>Profile</Link>
         </nav>
 
         <div className={"page-main"}>
@@ -51,10 +52,63 @@ export function FrontPage() {
         </div>
     </div>
 }
+export function randomString(length) {
+    const possible =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmopqrstuvwxyz1234567890";
+    let result = "";
+    for (let i = 0; i < length; i++) {
+        result += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return result;
+}
+
+export async function sha256(string) {
+    const binaryHash = await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder("utf-8").encode(string)
+    );
+    return btoa(String.fromCharCode.apply(null, new Uint8Array(binaryHash)))
+        .split("=")[0]
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_");
+}
+
+/*function LoginAD() {
+
+    useEffect(async () => {
+        const { authorization_endpoint } = await fetchJSON("https://login.microsoftonline.com/organizations/v2.0/.well-known/openid-configuration");
+
+        const state = randomString(50);
+        window.sessionStorage.setItem("authorization_state", state);
+        const code_verifier = randomString(50);
+        window.sessionStorage.setItem("code_verifier", code_verifier);
+
+        const parameters = {
+            response_type: "token",
+            //response_mode: "fragment",
+            state,
+            client_id: "1127fa8f-5af0-41b0-bd86-ee1392607b19",
+            scope: "openid email profile",
+            code_challenge: await sha256(code_verifier),
+            code_challenge_method: "S256",
+            redirect_uri: window.location.origin + "/login/callback",
+            domain_hint: "egms.no",
+        };
+
+        window.location.href =
+            authorization_endpoint + "?" + new URLSearchParams(parameters)
+    }, []);
+
+    return (
+        <div>
+            <h1>Please wait....</h1>
+        </div>
+    );
+}*/
 
 function LoginPage() {
-    const [redirectUrl, setRedirectUrl] = useState()
-    useEffect(async ()=> {
+    //const [redirectUrl, setRedirectUrl] = useState()
+    /*useEffect(async ()=> {
         const {authorization_endpoint} = await fetchJSON("https://accounts.google.com/.well-known/openid-configuration")
 
         const parameters = {
@@ -73,11 +127,41 @@ function LoginPage() {
                 <Link to={"/"}>The Daily Mail</Link>
                 <Link to={"/login"}>Log in</Link>
                 <Link to={"/publish"}>Publish</Link>
+                <Link to={"/login/profile"}>Profile</Link>
             </nav>
             <div>
                 <h1>Please hold (your horses)...</h1>
             </div>
+        </div>*/
+    useEffect(async () => {
+        const { authorization_endpoint } = await fetchJSON("https://login.microsoftonline.com/organizations/v2.0/.well-known/openid-configuration");
+
+        const state = randomString(50);
+        window.sessionStorage.setItem("authorization_state", state);
+        const code_verifier = randomString(50);
+        window.sessionStorage.setItem("code_verifier", code_verifier);
+
+        const parameters = {
+            response_type: "token",
+            client_id: "1127fa8f-5af0-41b0-bd86-ee1392607b19",
+            scope: "openid email profile",
+            code_challenge: await sha256(code_verifier),
+            code_challenge_method: "S256",
+            state,
+            domain_hint: "egms.no",
+            redirect_uri: window.location.origin + "/login/callback"
+            //response_mode: "fragment",
+        };
+
+        window.location.href =
+            authorization_endpoint + "?" + new URLSearchParams(parameters)
+    }, []);
+
+    return (
+        <div>
+            <h1>Please wait....</h1>
         </div>
+    );
 
 }
 
@@ -88,17 +172,72 @@ function PublishPage() {
                 <Link to={"/"}>The Daily Mail</Link>
                 <Link to={"/login"}>Log in</Link>
                 <Link to={"/publish"}>Publish</Link>
+                <Link to={"/login/profile"}>Profile</Link>
             </nav>
     </div>;
 }
+function LoginCallback() {
+    const [error, setError] = useState();
+    const navigate = useNavigate();
+    useEffect(async () => {
+        const { access_token } = Object.fromEntries(
+            new URLSearchParams(window.location.hash.substring(1))
+        );
+        console.log(access_token);
 
+       const res = await fetch("/api/login", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({ access_token }),
+        });
+        if (res.ok) {
+            navigate("/");
+        } else {
+            setError(`Failed POST /api/login: ${res.status} ${res.statusText}`);}
+    },[]);
+
+    if (error) {
+        return <div>
+            <h1>Error</h1>
+            <div>{error}</div>
+        </div>
+    }
+
+    return <h1>Please wait...</h1>;
+}
+
+function Profile() {
+    const { loading, data, error } = useLoading(async () => {
+        return await fetchJSON("/api/login");
+    });
+
+    if (loading) {
+        return <div>Please wait...</div>;
+    }
+    if (error) {
+        return <div>Error! {error.toString()}</div>;
+    }
+
+    return <div>
+            <h1>
+                Profile for {data.name} ({data.email})
+            </h1>
+            <div>
+                <img src={data.picture} alt={"Profile picture"} />
+            </div>
+        </div>
+    ;
+}
 function Application() {
     return <BrowserRouter>
        <Routes>
            <Route path={"/"} element={<FrontPage/>}/>
            <Route path={"/login"} element={<LoginPage/>}/>
            <Route path={"/publish"} element={<PublishPage/>}/>
-           <Route path={"/login/callback"} element={<h1>Login callback</h1>}/>
+           <Route path={"/login/callback"} element={<LoginCallback/>}/>
+           <Route path={"/login/profile"} element={<Profile/>}/>
        </Routes>
 
     </BrowserRouter>
@@ -120,9 +259,7 @@ function useLoading(loadingFunction){
         }
     }
 
-    useEffect(() => {
-        load()
-    },[])
+    useEffect(() => load(),[])
 
     return {loading, error, data}
 
