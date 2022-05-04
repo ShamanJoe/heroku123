@@ -11,7 +11,9 @@
     "build": "npm run build:client && npm run build:server",
     "build:client": "cd client && npm run build",
     "build:server": "cd server && npm run build",
-    "start": "cd server && npm start"
+    "start": "cd server && npm start",
+    "format:check": "prettier --check client server resources *.{jsx, js, css}",
+    "format": "prettier --write client server resources *.{jsx, js, css}"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
   },
   "homepage": "https://github.com/ShamanJoe/heroku123#readme",
   "devDependencies": {
-    "concurrently": "^7.0.0"
+    "concurrently": "^7.0.0",
+    "prettier": "^2.6.2"
   }
 }
