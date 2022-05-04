@@ -1,16 +1,7 @@
 import React, {useEffect, useState} from "react"
 import * as ReactDOM from "react-dom";
 import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
-
-function FrontPage() {
-    return <div>
-        <h1>Movie database exam</h1>
-            <ul>
-                <li><Link to={"/movies"}>List of all moviessss</Link></li>
-            </ul>
-    </div>
-}
-
+import '../resources/style.css'
 
 async function fetchJSON(url) {
    const res = await fetch(url)
@@ -20,15 +11,17 @@ async function fetchJSON(url) {
     return await res.json();
 }
 
-function MovieCard( {movie:{title, plot} }) {
+function ArticleCard( {article:{title, plot, category} }) {
     return <div>
         <h3>{title}</h3>
+        <h5>{category}</h5>
         <div>{plot}</div>
     </div>
 }
 
-export function ListMovies() {
-    const {loading, error, data} = useLoading(async () => fetchJSON("/api/movies")
+export function FrontPage() {
+
+    const {loading, error, data} = useLoading(async () => fetchJSON("/api/article")
     )
 
     if (loading){
@@ -40,13 +33,44 @@ export function ListMovies() {
             <div>{error.toString()}</div>
         </div>
     }
-    return <div>
-        <h1>List of all movies</h1>
-        <ul>
-            {data.map((movie) => (
-               <MovieCard key={movie.title} movie={movie}/>
+    return <div className={"page-wrap"}>
+        <header className={"page-header"}>Daily News</header>
+        <nav className={"page-nav"}>
+            <Link to={"/"}>The Daily Mail</Link>
+            <Link to={"/login"}>Log in</Link>
+            <Link to={"/publish"}>Publish</Link>
+        </nav>
+
+        <div className={"page-main"}>
+            <h1>All articles</h1>
+            <div>
+                {data.map((article) => (
+                    <ArticleCard key={article.title} article={article}/>
                 ))}
-        </ul>
+            </div>
+        </div>
+    </div>
+}
+
+function LoginPage() {
+    return <div className={"page-wrap"}>
+            <header className={"page-header"}>Daily News</header>
+            <nav className={"page-nav"}>
+                <Link to={"/"}>The Daily Mail</Link>
+                <Link to={"/login"}>Log in</Link>
+                <Link to={"/publish"}>Publish</Link>
+            </nav>
+        </div>
+}
+
+function PublishPage() {
+    return <div className={"page-wrap"}>
+            <header className={"page-header"}>Daily News</header>
+            <nav className={"page-nav"}>
+                <Link to={"/"}>The Daily Mail</Link>
+                <Link to={"/login"}>Log in</Link>
+                <Link to={"/publish"}>Publish</Link>
+            </nav>
     </div>;
 }
 
@@ -54,7 +78,8 @@ function Application() {
     return <BrowserRouter>
        <Routes>
            <Route path={"/"} element={<FrontPage/>}/>
-           <Route path={"/movies"} element={<ListMovies/>}/>
+           <Route path={"/login"} element={<LoginPage/>}/>
+           <Route path={"/publish"} element={<PublishPage/>}/>
        </Routes>
 
     </BrowserRouter>
