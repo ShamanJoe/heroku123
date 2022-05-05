@@ -7,22 +7,24 @@ export function ArticleApi(mongoDatabase) {
     const article = await mongoDatabase
       .collection("eksamen")
       .find()
-      .map(({ title, plot, category }) => ({
+      .map(({ title, plot, category, author }) => ({
         title,
         plot,
         category,
+        author
       }))
       //.limit()
       .toArray();
     res.json(article);
   });
 
-  router.post("/new", (req, res) => {
-    const { title, plot, category } = req.body;
-    const result = mongoDatabase.collection("eksamen").insertOne({
+  router.post("/", (req, res) => {
+    const { title, plot, category, author } = req.body;
+    mongoDatabase.collection("eksamen").insertOne({
       title,
       plot,
       category,
+        author
     });
     res.sendStatus(500);
   });

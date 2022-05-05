@@ -8,11 +8,17 @@ body {
   margin: 0;
 
   font: 500 100% system-ui, sans-serif;
-  text-transform: uppercase;
+  text-decoration: none;
+
+}
+
+#ArticleCard123{
+  border: solid black 10px;
+
 }
 .page-wrap {
   background: white;
-  height: calc(100vh - 10px);
+  height: calc(100vh - 100%);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0);
 
   display: grid;
@@ -56,7 +62,3 @@ body {
   background: #ffecb3;
 }
 
-details p {
-  text-transform: none;
-  text-align: left;
-}

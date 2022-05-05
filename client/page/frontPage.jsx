@@ -33,6 +33,14 @@ export function FrontPage() {
                     ))}
                 </div>
             </div>
+            <div className={"page-main"}>
+                <h1>All articles</h1>
+                <div>
+                    {data.map((article) => (
+                        <ArticleCard key={article.title} article={article}/>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }
