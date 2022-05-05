@@ -2,11 +2,18 @@ import React from "react";
 
 export function ArticleCard({article: {title, plot, category, author}}) {
     return (
-        <div>
+        <div id={"articlecard"}>
             <h3>{title}</h3>
-            <h5>{category}</h5>
-            <div>{plot}</div>
-            <div>{author}</div>
+            <h6>Category : {category}</h6>
+            <p>{plot}</p>
+            <h6>Author : {author}</h6>
+        </div>
+    );
+}
+export function ArticleCardSideMenu({article: {title}}) {
+    return (
+        <div id={"articlecardSideMenu"}>
+            <h3>{title}</h3>
         </div>
     );
 }

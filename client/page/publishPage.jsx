@@ -1,9 +1,7 @@
 import React, {useState} from "react";
 import {getNav} from "../getNav";
-import {ArticleCard} from "./articleCard";
-import {fetchJSON} from "../fetchJSON";
 import {postJSON} from "../postJSON";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 export function PublishPage() {
     async function createArticle(articles) {
@@ -27,6 +25,12 @@ export function PublishPage() {
         <div className={"page-wrap"}>
             <header className={"page-header"}>Daily News</header>
             {getNav()}
+            <div className={"page-sidebar"}>
+                <h1>All articles</h1>
+                <div>
+                    <Link to={"/"}>Click here to go to articles</Link>
+                </div>
+            </div>
         <form onSubmit={handleSubmit} className={"page-main"}>
             <h1>Create new article</h1>
             <div>

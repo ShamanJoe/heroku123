@@ -12,9 +12,11 @@ body {
 
 }
 
-#ArticleCard123{
-  border: solid black 10px;
-
+#articlecard{
+  border: solid ghostwhite 5px;
+  border-radius: 10px;
+  background: beige;
+  margin-bottom: 30px;
 }
 .page-wrap {
   background: white;

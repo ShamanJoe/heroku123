@@ -1,5 +1,5 @@
 import React from "react";
-import {ArticleCard} from "./articleCard";
+import {ArticleCard, ArticleCardSideMenu} from "./articleCard";
 import {fetchJSON} from "../fetchJSON";
 import {useLoading} from "../useLoading";
 import {getNav} from "../getNav";
@@ -29,7 +29,7 @@ export function FrontPage() {
                 <h1>All articles</h1>
                 <div>
                     {data.map((article) => (
-                        <ArticleCard key={article.title} article={article}/>
+                        <ArticleCardSideMenu key={article.title} article={article}/>
                     ))}
                 </div>
             </div>
