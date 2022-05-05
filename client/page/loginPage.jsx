@@ -3,7 +3,7 @@ import {randomString, sha256} from "../index";
 import {fetchJSON} from "../fetchJSON";
 
 export function LoginPage() {
-    //FOR GOOGLE LOG IN
+    /*************FOR GOOGLE LOG IN*******************/
     //const [redirectUrl, setRedirectUrl] = useState()
     /*useEffect(async ()=> {
           const {authorization_endpoint} = await fetchJSON("https://accounts.google.com/.well-known/openid-configuration")
@@ -31,7 +31,7 @@ export function LoginPage() {
               </div>
           </div>*/
 
-    //FOR AZURE ACTIVE DIRECTORY LOG IN
+    /************FOR AZURE ACTIVE DIRECTORY LOG IN********************/
     useEffect(async () => {
         const {authorization_endpoint} = await fetchJSON(
             "https://login.microsoftonline.com/organizations/v2.0/.well-known/openid-configuration"
