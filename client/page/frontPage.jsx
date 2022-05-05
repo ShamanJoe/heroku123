@@ -25,7 +25,7 @@ export function FrontPage() {
             <header className={"page-header"}>Daily News</header>
             {getNav()}
 
-            <div className={"page-main"}>
+            <div className={"page-sidebar"}>
                 <h1>All articles</h1>
                 <div>
                     {data.map((article) => (

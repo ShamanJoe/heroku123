@@ -16,13 +16,16 @@ export function Profile() {
     }
 
     return (
-        <div>
+        <div className={"page-wrap"}>
+            <header className={"page-header"}>Daily News</header>
             {getNav()}
+            <div className={"page-main"}>
             <h1>
                 Profile for {data.name} ({data.email})
             </h1>
             <div>
                 <img src={data.picture} alt={"Profile picture"}/>
+            </div>
             </div>
         </div>
     );
