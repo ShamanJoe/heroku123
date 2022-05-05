@@ -21,23 +21,29 @@ export function PublishPage() {
         console.log("Added to database");
     }
 
-    return (
-        <div className={"page-wrap"}>
-            <header className={"page-header"}>Daily News</header>
-            {getNav()}
-            <div className={"page-sidebar"}>
-                <h1>All articles</h1>
-                <div>
-                    <Link to={"/"}>Click here to go to articles</Link>
-                </div>
+
+    return(<div className={"page-wrap"}>
+        <header className={"page-header"}>Daily News</header>
+        {getNav()}
+        <div className={"page-sidebar"}>
+            <h1>All articles</h1>
+            <div>
+                <Link to={"/"}>Click here to go to articles</Link>
             </div>
+        </div>
         <form onSubmit={handleSubmit} className={"page-main"}>
             <h1>Create new article</h1>
             <div>
                 Category:
-                <select required>
-                    <option value={"News"} onSelect={event => setCategory(event.target.value)}>News</option>
-                    <option value={"Sport"} onSelect={event => setCategory(event.target.value)}>Sport</option>
+                <select required onChange={(e) => setCategory(e.target.value || null)}
+                    value={category}>
+                    <option value={""}></option>
+                    <option value={"News"}>News</option>
+                    <option value={"Sport"}>Sport</option>
+                    <option value={"Crime"}>Crime</option>
+                    <option value={"Finance"}>Finance</option>
+                    <option value={"Kids"}>Kids</option>
+                    <option value={"Other"}>Other</option>
 
                 </select>
             </div>
@@ -55,8 +61,10 @@ export function PublishPage() {
             </div>
             <button>Save</button>
         </form>
-        </div>
-    );
+    </div>
+);
+
+
     /*const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [plot, setPlot] = useState("");
